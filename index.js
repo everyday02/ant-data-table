@@ -1,16 +1,10 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import {DatePicker} from 'antd';
 
 import './index.css';
 import AntEditableTable from './src/AntEditableTable';
 
 class App extends Component {
-
-
-  componentDidMount() {
-
-  }
 
   render() {
     const dataSource = [{
@@ -77,9 +71,7 @@ class App extends Component {
     }];
     return (
       <div style={{margin: 100}}>
-        <h1>AntDesign Demo1</h1>
-        <hr /><br />
-        <DatePicker />
+        <h1>Editable Table Demo </h1>
         <AntEditableTable
           ref={(instance) => {
             this.tableInstance = instance;
