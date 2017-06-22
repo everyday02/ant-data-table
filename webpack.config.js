@@ -3,7 +3,6 @@
 
 
 module.exports = function(webpackConfig) {
-  console.info(webpackConfig);
   webpackConfig.babel.plugins.push('transform-runtime');
   webpackConfig.babel.plugins.push(['import', {
     libraryName: 'antd',
