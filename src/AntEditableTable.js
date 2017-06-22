@@ -71,11 +71,11 @@ class AntEditableTable extends Component {
         <Table
           {...props}
           dataSource={data}
-          columns={this.packColumnsRender(columns)} />
+          columns={this.wrapperColumnsRender(columns)} />
       </div>);
   }
 
-  packColumnsRender(columns) {
+  wrapperColumnsRender(columns) {
     columns.map((item) => {
       if (item.operation) {
         item.render = (text, record, index) => this.operationRender(this.state.data, text, record, index);
