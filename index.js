@@ -95,10 +95,9 @@ class App extends Component {
             this.tableInstance = instance;
           }}
           clickRowToEdit
-          data={dataSource}
           pagination={false}
-          columns={columns}
-          />
+          data={dataSource}
+          columns={columns} />
       </div>
     );
   }
