@@ -7,3 +7,8 @@
 [Live Demo | 演示地址。](http://106.14.208.184:8000/)
 
 [参数说明文档。](./doc/README.md)
+
+
+### 依赖 | Dependencies
+
+[ant-design](https://github.com/ant-design/ant-design)
