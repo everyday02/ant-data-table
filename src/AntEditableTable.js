@@ -48,15 +48,9 @@ class AntEditableTable extends Component {
     });
   }
 
-  wrapperRowClick() {
-    const {clickRowToEdit} = this.props;
-    if (clickRowToEdit) {
-      return (record, index) => {
-        this.edit(index);
-        if (this.props.onRowClick) this.props.onRowClick(record, index);
-      };
-    }
-    return null;
+  getDataSource() {
+    const {data} = this.state;
+    return data;
   }
 
   render() {
@@ -73,6 +67,17 @@ class AntEditableTable extends Component {
           dataSource={data}
           columns={this.wrapperColumnsRender(columns)} />
       </div>);
+  }
+
+  wrapperRowClick() {
+    const {clickRowToEdit} = this.props;
+    if (clickRowToEdit) {
+      return (record, index) => {
+        this.edit(index);
+        if (this.props.onRowClick) this.props.onRowClick(record, index);
+      };
+    }
+    return null;
   }
 
   wrapperColumnsRender(columns) {
