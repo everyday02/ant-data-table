@@ -5,6 +5,7 @@ import DateTableCell from './CellTypes/DateTableCell';
 import SelectTableCell from './CellTypes/SelectTableCell';
 import NumberTableCell from './CellTypes/NumberTableCell';
 import RateTableCell from './CellTypes/RateTableCell';
+import SliderTableCell from './CellTypes/SliderTableCell';
 
 class AntEditableTable extends Component {
 
@@ -130,6 +131,13 @@ class AntEditableTable extends Component {
           />);
       case 'rate':
         return (<RateTableCell
+          value={text}
+          config={config}
+          onChange={value => this.handleChange(key, index, value)}
+          status={status}
+          />);
+      case 'slider':
+        return (<SliderTableCell
           value={text}
           config={config}
           onChange={value => this.handleChange(key, index, value)}

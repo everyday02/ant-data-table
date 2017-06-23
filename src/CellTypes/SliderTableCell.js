@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Rate} from 'antd';
+import {Slider} from 'antd';
 
-class RateTableCell extends Component {
+class SliderTableCell extends Component {
   state = {
     value: this.props.value,
     cacheValue: this.props.value
@@ -24,14 +24,14 @@ class RateTableCell extends Component {
     return (
       <div onClick={(e) => {e.stopPropagation();}}>
         {
-          <Rate
-            {...config}
+          <Slider
+            defaultValue={value}
             onChange={this.handleChange.bind(this)}
-            value={value} />
+            {...config} />
         }
       </div>
     );
   }
 }
 
-export default RateTableCell;
+export default SliderTableCell;

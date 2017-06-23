@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {InputNumber} from 'antd';
 
-class InputTableCell extends Component {
+class NumberTableCell extends Component {
   state = {
     value: this.props.value,
     cacheValue: this.props.value
@@ -35,4 +35,4 @@ class InputTableCell extends Component {
   }
 }
 
-export default InputTableCell;
+export default NumberTableCell;

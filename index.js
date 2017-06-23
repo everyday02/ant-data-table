@@ -26,6 +26,7 @@ class App extends Component {
       age: 32,
       date: null,
       credit: 3,
+      level: 0,
       city: null,
       address: '西湖区湖底公园1号'
     }, {
@@ -34,6 +35,7 @@ class App extends Component {
       age: 42,
       date: null,
       credit: 5,
+      level: 0,
       city: null,
       address: '西湖区湖底公园1号'
     }];
@@ -57,6 +59,14 @@ class App extends Component {
         style: {fontSize: 14}
       },
       key: 'credit'
+    }, {
+      title: '等级',
+      width: 80,
+      dataIndex: 'level',
+      editable: {
+        type: 'slider'
+      },
+      key: 'level'
     }, {
       title: '出生日期',
       dataIndex: 'date',
