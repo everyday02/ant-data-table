@@ -1,10 +1,23 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import {notification, Button} from 'antd';
 
 import './index.css';
 import AntEditableTable from './src/AntEditableTable';
 
 class App extends Component {
+
+  handleTableData() {
+    console.info(this.tableInstance.getDataSource());
+    notification.open({
+      message: 'Table Data',
+      description: JSON.stringify(this.tableInstance.getDataSource()),
+      style: {
+        width: 600,
+        marginLeft: 335 - 600
+      }
+    });
+  }
 
   render() {
     const dataSource = [{
@@ -69,8 +82,13 @@ class App extends Component {
       operation: true,
       width: 200
     }];
+
     return (
-      <div style={{margin: 100}}>
+      <div style={{padding: 100}}>
+        <Button
+          onClick={this.handleTableData.bind(this)}
+          type="primary">获取表格所有数据</Button>
+
         <h1>Editable Table Demo </h1>
         <AntEditableTable
           ref={(instance) => {
