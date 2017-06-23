@@ -25,6 +25,7 @@ class App extends Component {
       name: '胡彦斌',
       age: 32,
       date: null,
+      credit: 3,
       city: null,
       address: '西湖区湖底公园1号'
     }, {
@@ -32,6 +33,7 @@ class App extends Component {
       name: '胡彦祖',
       age: 42,
       date: null,
+      credit: 5,
       city: null,
       address: '西湖区湖底公园1号'
     }];
@@ -47,6 +49,14 @@ class App extends Component {
         type: 'number'
       },
       key: 'age'
+    }, {
+      title: '信用度',
+      dataIndex: 'credit',
+      editable: {
+        type: 'rate',
+        style: {fontSize: 14}
+      },
+      key: 'credit'
     }, {
       title: '出生日期',
       dataIndex: 'date',

@@ -4,6 +4,7 @@ import InputTableCell from './CellTypes/InputTableCell';
 import DateTableCell from './CellTypes/DateTableCell';
 import SelectTableCell from './CellTypes/SelectTableCell';
 import NumberTableCell from './CellTypes/NumberTableCell';
+import RateTableCell from './CellTypes/RateTableCell';
 
 class AntEditableTable extends Component {
 
@@ -61,12 +62,11 @@ class AntEditableTable extends Component {
     props.onRowClick = this.wrapperRowClick();
 
     return (
-      <div>
-        <Table
-          {...props}
-          dataSource={data}
-          columns={this.wrapperColumnsRender(columns)} />
-      </div>);
+      <Table
+        {...props}
+        dataSource={data}
+        columns={this.wrapperColumnsRender(columns)} />
+    );
   }
 
   wrapperRowClick() {
@@ -123,6 +123,13 @@ class AntEditableTable extends Component {
           />);
       case 'number':
         return (<NumberTableCell
+          value={text}
+          config={config}
+          onChange={value => this.handleChange(key, index, value)}
+          status={status}
+          />);
+      case 'rate':
+        return (<RateTableCell
           value={text}
           config={config}
           onChange={value => this.handleChange(key, index, value)}
