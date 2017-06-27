@@ -16,6 +16,8 @@ class SliderTableCell extends Component {
   }
 
   handleChange(value) {
+    const {onRowFieldChange} = this.props;
+    if (onRowFieldChange) onRowFieldChange(value);
     this.setState({value});
   }
   render() {

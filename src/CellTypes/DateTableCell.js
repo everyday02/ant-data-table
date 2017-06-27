@@ -19,23 +19,37 @@ class DateTableCell extends Component {
   }
 
   handleChange(dateMoment, value) {
+    const {onRowFieldChange} = this.props;
+    if (onRowFieldChange) onRowFieldChange(value);
     this.setState({value});
   }
-  render() {
+
+  renderDateType() {
     const {value} = this.state;
     const {config} = this.props;
+
+    switch (config.type) {
+      case 'datetime':
+        return (<DatePicker
+          showTime
+          format="YYYY-MM-DD HH:mm:ss"
+          onChange={this.handleChange.bind(this)}
+          defaultValue={value ? moment(value, 'YYYY-MM-DD HH:mm:ss') : null} />);
+      case 'datemonth':
+        return (<MonthPicker
+          onChange={this.handleChange.bind(this)}
+          defaultValue={value ? moment(value, 'YYYY-MM') : null} />);
+      default:
+        return (<DatePicker
+          onChange={this.handleChange.bind(this)}
+          defaultValue={value ? moment(value, 'YYYY-MM-DD') : null} />);
+    }
+  }
+
+  render() {
     return (
       <div onClick={(e) => {e.stopPropagation();}}>
-        {
-        config.type === 'date' ?
-          <DatePicker
-            onChange={this.handleChange.bind(this)}
-            defaultValue={value ? moment(value, 'YYYY-MM-DD') : null} />
-          :
-            <MonthPicker
-              onChange={this.handleChange.bind(this)}
-              defaultValue={value ? moment(value, 'YYYY-MM') : null} />
-        }
+        {this.renderDateType()}
       </div>
     );
   }

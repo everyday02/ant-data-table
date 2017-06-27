@@ -18,6 +18,8 @@ class SelectTableCell extends Component {
   }
 
   handleChange(value) {
+    const {onRowFieldChange} = this.props;
+    if (onRowFieldChange) onRowFieldChange(value);
     this.setState({value});
   }
   render() {
@@ -30,13 +32,20 @@ class SelectTableCell extends Component {
           onChange={this.handleChange.bind(this)}
           defaultValue={value} >
           {
-          config.options.map(item =>
-            <Option
-              key={item}
-              value={item}>
-              {item}
-            </Option>
-          )
+            config.options.map((item) => {
+              if (typeof item === 'object') {
+                return (<Option
+                  key={item.name}
+                  value={item.value}>
+                  {item.value}
+                </Option>);
+              }
+              return (<Option
+                key={item}
+                value={item}>
+                {item}
+              </Option>);
+            })
           }
         </Select>
       </div>

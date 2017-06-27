@@ -17,6 +17,8 @@ class InputTableCell extends Component {
 
   handleChange(e) {
     const value = e.target.value;
+    const {onRowFieldChange} = this.props;
+    if (onRowFieldChange) onRowFieldChange(value);
     this.setState({value});
   }
   render() {
@@ -25,13 +27,11 @@ class InputTableCell extends Component {
     return (
       <div onClick={(e) => {e.stopPropagation();}}>
         {
-          <div>
-            <Input
-              {...config}
-              value={value}
-              onChange={e => this.handleChange(e)}
-            />
-          </div>
+          <Input
+            {...config}
+            value={value}
+            onChange={e => this.handleChange(e)}
+          />
         }
       </div>
     );

@@ -16,6 +16,8 @@ class NumberTableCell extends Component {
   }
 
   handleChange(value) {
+    const {onRowFieldChange} = this.props;
+    if (onRowFieldChange) onRowFieldChange(value);
     this.setState({value});
   }
   render() {
@@ -23,12 +25,10 @@ class NumberTableCell extends Component {
     return (
       <div onClick={(e) => {e.stopPropagation();}}>
         {
-          <div>
-            <InputNumber
-              defaultValue={value}
-              onChange={this.handleChange.bind(this)}
-              {...this.props.config} />
-          </div>
+          <InputNumber
+            defaultValue={value}
+            onChange={this.handleChange.bind(this)}
+            {...this.props.config} />
         }
       </div>
     );
