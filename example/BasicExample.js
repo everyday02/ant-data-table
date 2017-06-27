@@ -43,11 +43,7 @@ class BasicExample extends Component {
   }
 
   handleOnRowSave(index, oldRecord, newRecord) {
-    //const {dataSource} = this.state;
     console.info(index, oldRecord, newRecord);
-    //dataSource[index] = newRecord;
-    // this.setState(dataSource);
-    //return false;
   }
 
   handleOnDelete(index) {
