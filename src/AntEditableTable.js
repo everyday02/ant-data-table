@@ -8,15 +8,16 @@ import RateTableCell from './CellTypes/RateTableCell';
 import SliderTableCell from './CellTypes/SliderTableCell';
 
 class AntEditableTable extends Component {
+  editableRow: {};
 
   constructor(props) {
     super(props);
     this.state = {
       data: props.data,
+      columns: props.columns,
       editIndex: -1,
       editable: false,
-      status: null,
-      columns: props.columns
+      status: null
     };
   }
 
@@ -25,29 +26,14 @@ class AntEditableTable extends Component {
     this.state = {data};
   }
 
+  onRowFieldChange(key, index, value) {
+    this.editableRow[key] = value;
+  }
+
   handleChange(key, index, value) {
     const {data} = this.state;
-    const {onRowSave} = this.props;
     data[index][key] = value;
-    if (onRowSave) onRowSave(data);
     this.setState({data, editable: false});
-  }
-
-  handleSaveAll() {
-    const {data} = this.state;
-    const {onAllSave} = this.props;
-    onAllSave(data);
-  }
-
-  edit(index) {
-    this.setState({editIndex: index, editable: true});
-  }
-
-  editDone(index, action) {
-    this.setState({
-      editIndex: index,
-      status: action
-    });
   }
 
   getDataSource() {
@@ -55,12 +41,39 @@ class AntEditableTable extends Component {
     return data;
   }
 
+  edit(index) {
+    const {data} = this.state;
+    this.editableRow = Object.assign({}, data[index]);
+    this.setState({editIndex: index, editable: true});
+  }
+
+  delete(index) {
+    const {data} = this.state;
+    const {onDelete} = this.props;
+
+    if (onDelete) onDelete(index, data[index]);
+  }
+
+  editDone(index, action) {
+    const {data} = this.state;
+    const {onRowSave} = this.props;
+
+    if (onRowSave
+      && action === 'save'
+      && onRowSave(index, data[index], this.editableRow) === false) return;
+
+    this.setState({
+      editIndex: index,
+      status: action
+    });
+  }
+
   render() {
     const props = {...this.props};
-    const {columns} = this.props;
+    const {columns, enableRowEdit} = this.props;
     const {data} = this.state;
 
-    props.onRowClick = this.wrapperRowClick();
+    if (enableRowEdit) props.onRowClick = this.wrapperRowClick();
 
     return (
       <Table
@@ -71,25 +84,22 @@ class AntEditableTable extends Component {
   }
 
   wrapperRowClick() {
-    const {clickRowToEdit} = this.props;
-    if (clickRowToEdit) {
-      return (record, index) => {
-        this.edit(index);
-        if (this.props.onRowClick) this.props.onRowClick(record, index);
-      };
-    }
-    return null;
+    return (record, index) => {
+      this.edit(index);
+      if (this.props.onRowClick) this.props.onRowClick(record, index);
+    };
   }
 
   wrapperColumnsRender(columns) {
-    columns.map((item) => {
+    columns.map((item, idx) => {
       if (item.operation) {
-        item.render = (text, record, index) => this.operationRender(this.state.data, text, record, index);
+        item.render = (text, record, index) => this.renderOperation(this.state.data, text, record, index);
         return item;
       }
       if (!item.render && item.editable) {
         item.render = (text, record, index) => this.renderColumns(this.state.data, index, item.dataIndex, text, item.editable || {});
       }
+      item.key = idx;
       return item;
     });
     return columns;
@@ -97,21 +107,30 @@ class AntEditableTable extends Component {
 
   renderColumns(data, index, key, text, config) {
     const {status, editIndex} = this.state;
-    if (editIndex !== index) return <div>{text}</div>;
-    if (!this.state.editable) return <div>{text}</div>;
+    if (editIndex !== index || !this.state.editable) return <div>{text}</div>;
     switch (config.type) {
       case 'date':
         return (
           <DateTableCell
             value={text}
             config={config}
+            onRowFieldChange={value => this.onRowFieldChange(key, index, value)}
             onChange={value => this.handleChange(key, index, value)}
             status={status}
             />);
-      case 'dateMonth':
+      case 'datetime':
         return (<DateTableCell
           value={text}
           config={config}
+          onRowFieldChange={value => this.onRowFieldChange(key, index, value)}
+          onChange={value => this.handleChange(key, index, value)}
+          status={status}
+          />);
+      case 'datemonth':
+        return (<DateTableCell
+          value={text}
+          config={config}
+          onRowFieldChange={value => this.onRowFieldChange(key, index, value)}
           onChange={value => this.handleChange(key, index, value)}
           status={status}
           />);
@@ -119,6 +138,7 @@ class AntEditableTable extends Component {
         return (<SelectTableCell
           value={text}
           config={config}
+          onRowFieldChange={value => this.onRowFieldChange(key, index, value)}
           onChange={value => this.handleChange(key, index, value)}
           status={status}
           />);
@@ -126,6 +146,7 @@ class AntEditableTable extends Component {
         return (<NumberTableCell
           value={text}
           config={config}
+          onRowFieldChange={value => this.onRowFieldChange(key, index, value)}
           onChange={value => this.handleChange(key, index, value)}
           status={status}
           />);
@@ -133,6 +154,7 @@ class AntEditableTable extends Component {
         return (<RateTableCell
           value={text}
           config={config}
+          onRowFieldChange={value => this.onRowFieldChange(key, index, value)}
           onChange={value => this.handleChange(key, index, value)}
           status={status}
           />);
@@ -140,6 +162,7 @@ class AntEditableTable extends Component {
         return (<SliderTableCell
           value={text}
           config={config}
+          onRowFieldChange={value => this.onRowFieldChange(key, index, value)}
           onChange={value => this.handleChange(key, index, value)}
           status={status}
           />);
@@ -148,13 +171,14 @@ class AntEditableTable extends Component {
           <InputTableCell
             value={text}
             config={config}
+            onRowFieldChange={value => this.onRowFieldChange(key, index, value)}
             onChange={value => this.handleChange(key, index, value)}
             status={status}
             />);
     }
   }
 
-  operationRender(data, text, record, index) {
+  renderOperation(data, text, record, index) {
     const {editable, editIndex} = this.state;
     return (
       <div className="editable-row-operations" onClick={(e) => {e.stopPropagation();}}>
@@ -175,6 +199,11 @@ class AntEditableTable extends Component {
               <Icon
                 style={{fontSize: 18, color: '#007087'}}
                 type="edit" onClick={() => this.edit(index)} />
+              <Popconfirm title="确认删除吗?" onConfirm={() => this.delete(index)}>
+                <Icon
+                  style={{fontSize: 18, marginLeft: 15, color: '#007087'}}
+                  type="delete" />
+              </Popconfirm>
             </a>
         }
       </div>
